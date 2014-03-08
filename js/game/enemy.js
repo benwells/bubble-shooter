@@ -8,44 +8,44 @@ function Enemy(info) {
   info.y = info.cHeight / 4 + Math.random() * info.cHeight / 2;
   info.xVelocity = 3;
   info.yVelocity = 0;
-  info.width = 20;
-  info.height = 20;
+  info.radius = 20;
 
-  info.inBounds = function(w, h) {
+
+  info.inBounds = function (w, h) {
     return info.x >= 0 && info.x <= w && info.y >= 0 && info.y <= h;
   };
 
-  info.draw = function(canvas) {
+  info.draw = function (canvas) {
     canvas.strokeStyle = this.color;
     // canvas.fillRect(this.x, this.y, this.width, this.height);
     canvas.beginPath();
-    canvas.arc(this.x,this.y,20,0,Math.PI*2,true); // Outer circle
+    canvas.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true); // Outer circle
     canvas.stroke();
     canvas.beginPath();
-    canvas.arc(this.x,this.y,15,Math.PI,1.5* Math.PI,false);   // Mouth (clockwise)
+    canvas.arc(this.x, this.y, this.radius - 5, Math.PI, 1.5 * Math.PI, false); // inner arc
     canvas.stroke();
   };
 
-  info.update = function(w, h) {
+  info.update = function (w, h) {
     info.x -= info.xVelocity;
     info.y += info.yVelocity;
 
     //controls the "back and forth" motion of enemy
-    info.yVelocity = 3 * Math.sin(info.age * Math.PI / 64); 
+    info.yVelocity = 3 * Math.sin(info.age * Math.PI / 64);
 
     info.age++;
 
     info.active = info.active && info.inBounds(w, h);
   };
 
-  info.explode = function(canvas){
+  info.explode = function (canvas) {
     // info.color = "white";
     info.active = false;
 
     //return an explosion object
-    return { 
-      width:this.width/2, 
-      height:this.height/2,
+    return {
+      width: this.width / 2,
+      height: this.height / 2,
       x: this.x,
       y: this.y
     };
