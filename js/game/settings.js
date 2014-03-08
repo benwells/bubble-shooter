@@ -107,9 +107,8 @@ function game() {
       bullets.forEach(function (bullet) {
         if (bullet.x > enemy.x && bullet.x < (enemy.x + enemy.width) &&
           bullet.y > enemy.y && bullet.y < (enemy.y + enemy.height)) {
-          console.log('collision!');
-          _this.updateScore(enemy.points);
-          _this.explosions.push(new explosion(enemy.explode(ctxt)));
+          
+          _this.updateScore(enemy.points).explosions.push(new explosion(enemy.explode(ctxt)));;
           bullet.active = false;
         }
       })
@@ -122,5 +121,8 @@ function game() {
     if (old_score != this.current_score) {
       $('#score').html(this.current_score);
     }
+
+    //make chainable
+    return this; 
   };
 }
