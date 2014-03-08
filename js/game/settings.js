@@ -8,8 +8,9 @@ function game() {
   this.player = new player(this.context);
   this.shot = false;
   this.enemies = [];
+  this.explosions = [];
   this.current_score = 0;
-  
+
   this.draw = function () {
     var context = this.context;
 
@@ -22,6 +23,10 @@ function game() {
 
     this.enemies.forEach(function (enemy) {
       enemy.draw(context);
+    });
+
+    this.explosions.forEach(function (explosion) {
+      explosion.draw(context);
     });
   };
 
@@ -70,7 +75,7 @@ function game() {
       }));
     }
 
-    this.detectCollision(this.enemies, this.player.bullets);
+    this.detectCollision(this.enemies, this.player.bullets, this.context);
   }
 
   this.init = function () {
@@ -78,13 +83,13 @@ function game() {
     _this.gameScreen.appendTo('#' + _this.containerId);
     _this.player.draw(_this.context);
 
-    setInterval(function() {
-      _this.update();
+    setInterval(function () {
       _this.draw();
-    }, 1000/_this.FPS);
+      _this.update();
+    }, 1000 / _this.FPS);
   };
 
-  this.detectCollision = function(enemies, bullets) {
+  this.detectCollision = function (enemies, bullets, ctxt) {
     var _this = this;
     enemies.forEach(function (enemy) {
       bullets.forEach(function (bullet) {
@@ -92,7 +97,7 @@ function game() {
           bullet.y > enemy.y && bullet.y < (enemy.y + enemy.height)) {
           console.log('collision!')
           _this.updateScore(enemy.points);
-          enemy.explode();
+          _this.explosions.push(new explosion(enemy.explode(ctxt)));
           bullet.active = false;
         }
       })
