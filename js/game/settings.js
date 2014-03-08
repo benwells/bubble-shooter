@@ -81,7 +81,6 @@ function game() {
   this.init = function () {
     var _this = this;
     _this.gameScreen.appendTo('#' + _this.containerId);
-    _this.player.draw(_this.context);
 
     setInterval(function () {
       _this.draw();
