@@ -10,11 +10,10 @@ function game() {
   this.enemies = [];
   this.explosions = [];
   this.current_score = 0;
+  this.timeId;
 
   this.draw = function () {
     var context = this.context;
-
-    context.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
     this.player.draw();
 
     this.player.bullets.forEach(function (bullet) {
@@ -28,6 +27,10 @@ function game() {
     this.explosions.forEach(function (explosion) {
       explosion.draw(context);
     });
+  };
+
+  this.clearCanvas = function () {
+    this.context.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
   };
 
   this.update = function () {
@@ -78,14 +81,24 @@ function game() {
     this.detectCollision(this.enemies, this.player.bullets, this.context);
   }
 
+  this.runLoop = function () {
+    var _this = this;
+    _this.clearCanvas();
+    _this.draw();
+    _this.update();
+
+    clearTimeout(_this.timeId);
+
+    // Recursive call
+    _this.timeId = setTimeout(function () {
+      _this.runLoop();
+    }, _this.FPS);
+  };
+
   this.init = function () {
     var _this = this;
     _this.gameScreen.appendTo('#' + _this.containerId);
-
-    setInterval(function () {
-      _this.draw();
-      _this.update();
-    }, 1000 / _this.FPS);
+    _this.runLoop();
   };
 
   this.detectCollision = function (enemies, bullets, ctxt) {
@@ -94,7 +107,7 @@ function game() {
       bullets.forEach(function (bullet) {
         if (bullet.x > enemy.x && bullet.x < (enemy.x + enemy.width) &&
           bullet.y > enemy.y && bullet.y < (enemy.y + enemy.height)) {
-          console.log('collision!')
+          console.log('collision!');
           _this.updateScore(enemy.points);
           _this.explosions.push(new explosion(enemy.explode(ctxt)));
           bullet.active = false;
