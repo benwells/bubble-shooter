@@ -16,8 +16,14 @@ function Enemy(info) {
   };
 
   info.draw = function(canvas) {
-    canvas.fillStyle = this.color;
-    canvas.fillRect(this.x, this.y, this.width, this.height);
+    canvas.strokeStyle = this.color;
+    // canvas.fillRect(this.x, this.y, this.width, this.height);
+    canvas.beginPath();
+    canvas.arc(this.x,this.y,20,0,Math.PI*2,true); // Outer circle
+    canvas.stroke();
+    canvas.beginPath();
+    canvas.arc(this.x,this.y,15,Math.PI,1.5* Math.PI,false);   // Mouth (clockwise)
+    canvas.stroke();
   };
 
   info.update = function(w, h) {
@@ -33,19 +39,15 @@ function Enemy(info) {
   };
 
   info.explode = function(canvas){
-    info.color = "white";
-    // canvas.fillStyle = this.color;
-    // console.log('x', this.x, 'y', this.y, 'width', this.width/2, 'height', this.height/2)
-    // canvas.fillRect(this.x+20, this.y+20, this.width/2, this.height/2);
-    // canvas.fillRect(this.x+4, this.y+4, this.width/2, this.height/2);
-    // canvas.fillRect(this.x+6, this.y+6, this.width/2, this.height/2);
-    // info.y += 200;
+    // info.color = "white";
     info.active = false;
+
+    //return an explosion object
     return { 
       width:this.width/2, 
       height:this.height/2,
-      x: this.x+4,
-      y: this.y+4
+      x: this.x,
+      y: this.y
     };
   }
 

@@ -71,6 +71,10 @@ function game() {
       return enemy.active;
     });
 
+    this.explosions.forEach(function (explosion) {
+      explosion.update();
+    });
+
     if (Math.random() < 0.05) { //this number controls the frequency of enemies
       this.enemies.push(Enemy({
         x: _this.CANVAS_WIDTH,
@@ -79,6 +83,7 @@ function game() {
     }
 
     this.detectCollision(this.enemies, this.player.bullets, this.context);
+
   }
 
   this.runLoop = function () {
