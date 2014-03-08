@@ -4,7 +4,7 @@ function Bullet(info) {
   info.xVelocity = info.speed;
   info.width = 3;
   info.height = 3;
-  info.color = "#000";
+  info.color = "white";
 
   info.inBounds = function (w, h) {
     return info.x >= 0 && info.x <= w && info.y >= 0 && info.y <= h;
