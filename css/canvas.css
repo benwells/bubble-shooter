@@ -1,6 +1,16 @@
 canvas {
-	border: 1px solid black;
+  border: 1px solid black;
+	background: black;
 	position: relative;
 	margin-top: 100px;
 	margin: 0 auto;
+}
+
+.row {
+  text-align: center;
+}
+
+body {
+  padding-top: 75px;
+  background: gray;
 }
