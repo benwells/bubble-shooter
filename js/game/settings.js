@@ -1,7 +1,7 @@
 function game() {
   this.CANVAS_WIDTH = 780;
   this.CANVAS_HEIGHT = 420;
-  this.FPS = 30;
+  this.FPS = 20;
   this.containerId = "container";
   this.gameScreen = $("<canvas width='" + this.CANVAS_WIDTH + "' height='" + this.CANVAS_HEIGHT + "'></canvas>");
   this.context = this.gameScreen.get(0).getContext("2d");
