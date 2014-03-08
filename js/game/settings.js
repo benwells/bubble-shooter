@@ -107,14 +107,28 @@ function game() {
   };
 
   this.detectCollision = function (enemies, bullets, ctxt) {
-    var _this = this;
+    var _this = this,
+        xmax,
+        xmin,
+        ymax,
+        ymin, 
+        enemyX,
+        enemyY,
+        enemyRadius;
+
     enemies.forEach(function (enemy) {
+      enemyX = enemy.x;
+      enemyY = enemy.y;
+      enemyRadius = enemy.radius;
+      xmax = enemyX + enemyRadius - 2;
+      xmin = enemyX - enemyRadius + 2;
+      ymax = enemyY + enemyRadius - 2;
+      ymin = enemyY - enemyRadius + 2;
+
       bullets.forEach(function (bullet) {
-        if (bullet.x > enemy.x && bullet.x < (enemy.x + enemy.width) &&
-          bullet.y > enemy.y && bullet.y < (enemy.y + enemy.height)) {
-          
-          _this.updateScore(enemy.points).explosions.push(new explosion(enemy.explode(ctxt)));;
-          bullet.active = false;
+        if (bullet.x <= xmax && bullet.x >= xmin && bullet.y <= ymax && bullet.y >= ymin) {
+          _this.updateScore(enemy.points).explosions.push(new explosion(enemy.explode(ctxt)));
+          bullet.active = false; 
         }
       })
     });
