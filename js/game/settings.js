@@ -1,0 +1,109 @@
+function game() {
+  this.CANVAS_WIDTH = 780;
+  this.CANVAS_HEIGHT = 420;
+  this.FPS = 30;
+  this.containerId = "container";
+  this.gameScreen = $("<canvas width='" + this.CANVAS_WIDTH + "' height='" + this.CANVAS_HEIGHT + "'></canvas>");
+  this.context = this.gameScreen.get(0).getContext("2d");
+  this.player = new player(this.context);
+  this.shot = false;
+  this.enemies = [];
+  this.current_score = 0;
+  
+  this.draw = function () {
+    var context = this.context;
+
+    context.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+    this.player.draw();
+
+    this.player.bullets.forEach(function (bullet) {
+      bullet.draw(context);
+    });
+
+    this.enemies.forEach(function (enemy) {
+      enemy.draw(context);
+    });
+  };
+
+  this.update = function () {
+    var _this = this;
+    if (keydown.space && this.shot == false) {
+      this.shot = true
+      this.player.shoot();
+    } else if (!keydown.space) {
+      this.shot = false;
+    }
+
+    if (keydown.up) {
+      this.player.y -= 15;
+    }
+
+    if (keydown.down) {
+      this.player.y += 15;
+    }
+
+    //clamps the player to the canvas
+    this.player.y = this.player.y.clamp(0, this.CANVAS_HEIGHT - this.player.height);
+
+    //update every bullet
+    this.player.bullets.forEach(function (bullet) {
+      bullet.update(_this.CANVAS_WIDTH, _this.CANVAS_HEIGHT);
+    });
+
+    //get rid of inactive bullets
+    this.player.bullets = this.player.bullets.filter(function (bullet) {
+      return bullet.active;
+    });
+
+    this.enemies.forEach(function (enemy) {
+      enemy.update(_this.CANVAS_WIDTH, _this.CANVAS_HEIGHT);
+    });
+
+    this.enemies = this.enemies.filter(function (enemy) {
+      return enemy.active;
+    });
+
+    if (Math.random() < 0.05) { //this number controls the frequency of enemies
+      this.enemies.push(Enemy({
+        x: _this.CANVAS_WIDTH,
+        cHeight: _this.CANVAS_HEIGHT
+      }));
+    }
+
+    this.detectCollision(this.enemies, this.player.bullets);
+  }
+
+  this.init = function () {
+    var _this = this;
+    _this.gameScreen.appendTo('#' + _this.containerId);
+    _this.player.draw(_this.context);
+
+    setInterval(function() {
+      _this.update();
+      _this.draw();
+    }, 1000/_this.FPS);
+  };
+
+  this.detectCollision = function(enemies, bullets) {
+    var _this = this;
+    enemies.forEach(function (enemy) {
+      bullets.forEach(function (bullet) {
+        if (bullet.x > enemy.x && bullet.x < (enemy.x + enemy.width) &&
+          bullet.y > enemy.y && bullet.y < (enemy.y + enemy.height)) {
+          console.log('collision!')
+          _this.updateScore(enemy.points);
+          enemy.explode();
+          bullet.active = false;
+        }
+      })
+    });
+  };
+
+  this.updateScore = function (points) {
+    var old_score = this.current_score;
+    this.current_score += points;
+    if (old_score != this.current_score) {
+      $('#score').html(this.current_score);
+    }
+  };
+}
