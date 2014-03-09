@@ -14,7 +14,6 @@ function message(text) {
     context2.fillText(this.text, this.x, this.y);
   };
   this.update = function () {
-    
     if (this.fontSize <= this.fontMax) {
       this.fontSize += 4;
     }
