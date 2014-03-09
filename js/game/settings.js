@@ -13,6 +13,8 @@ function game() {
   this.explosions = [];
   this.current_score = 0;
   this.timeId = 0;
+  this.level = 1;
+  this.message = new message("LEVEL " + this.level);
 
   this.draw = function () {
     var _this = this,
@@ -32,14 +34,12 @@ function game() {
       _this.explosions[i].draw(context);
     }
 
-    this.context2.font = " 24px sans-serif";
-    this.context2.fillStyle = 'white';
-    context.textBaseline = "top";
-    this.context2.fillText("Hello There", 248, 43);
+    _this.message.draw(this.context2);
   };
 
   this.clearCanvas = function () {
     this.context.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+    this.context2.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
   };
 
   this.update = function () {
@@ -83,6 +83,8 @@ function game() {
     this.explosions.forEach(function (explosion) {
       explosion.update();
     });
+
+    _this.message.update();
 
     if (Math.random() < 0.05) { //this number controls the frequency of enemies
       this.enemies.push(Enemy({
