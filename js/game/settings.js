@@ -15,6 +15,7 @@ function game() {
   this.timeId = 0;
   this.level = 1;
   this.message = new message("LEVEL " + this.level);
+  this.score = new score();
 
   this.draw = function () {
     var _this = this,
@@ -35,6 +36,8 @@ function game() {
     }
 
     _this.message.draw(this.context2);
+    _this.score.draw(this.context2);
+
   };
 
   this.clearCanvas = function () {
@@ -150,7 +153,7 @@ function game() {
     var old_score = this.current_score;
     this.current_score += points;
     if (old_score != this.current_score) {
-      $('#score').html(this.current_score);
+      this.score.score = this.current_score;
     }
 
     //make chainable
