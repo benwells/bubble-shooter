@@ -13,8 +13,6 @@ function player(canvasContext) {
     };
   };
   this.draw = function (canvas) {
-    // this.canvas.fillStyle = this.color;
-    // this.canvas.fillRect(this.x, this.y, this.width, this.height);
     this.canvas.drawImage(document.getElementById('shipImg'),this.x, this.y, this.width, this.height);
   };
   this.shoot = function () {

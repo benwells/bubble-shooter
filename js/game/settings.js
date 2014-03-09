@@ -13,20 +13,22 @@ function game() {
   this.timeId;
 
   this.draw = function () {
-    var context = this.context;
-    this.player.draw();
+    var _this = this,
+        context = _this.context;
 
-    this.player.bullets.forEach(function (bullet) {
-      bullet.draw(context);
-    });
+    _this.player.draw();
 
-    this.enemies.forEach(function (enemy) {
-      enemy.draw(context);
-    });
+    for (i = 0; i < _this.player.bullets.length; i++) {
+      _this.player.bullets[i].draw(context);
+    };
 
-    this.explosions.forEach(function (explosion) {
-      explosion.draw(context);
-    });
+    for (i = 0; i < this.enemies.length; i++) {
+      this.enemies[i].draw(context);
+    };
+
+    for (i = 0; i < _this.explosions.length; i++) {
+      _this.explosions[i].draw(context);
+    };
   };
 
   this.clearCanvas = function () {
