@@ -1,9 +1,18 @@
 canvas {
   border: 1px solid black;
 	background: black;
-	position: relative;
-	margin-top: 100px;
+	position: absolute;
+/*	position: relative;*/
+  left: 0;
+  right: 0;
+  margin-left:auto;
+  margin-right:auto;
 	margin: 0 auto;
+}
+
+#canvas2 {
+  z-index: 1;
+  background:none;
 }
 
 .row {
@@ -13,4 +22,10 @@ canvas {
 body {
   padding-top: 75px;
   background: gray;
+}
+
+#container {
+  width: 780px;
+  height: 420px;
+  margin-bottom:20px;
 }

@@ -4,13 +4,15 @@ function game() {
   this.FPS = 20;
   this.containerId = "container";
   this.gameScreen = $("<canvas width='" + this.CANVAS_WIDTH + "' height='" + this.CANVAS_HEIGHT + "'></canvas>");
+  this.overlayScreen = $("<canvas id='canvas2' width='" + this.CANVAS_WIDTH + "' height='" + this.CANVAS_HEIGHT + "'></canvas>");
   this.context = this.gameScreen.get(0).getContext("2d");
+  this.context2 = this.overlayScreen.get(0).getContext("2d");
   this.player = new player(this.context);
   this.shot = false;
   this.enemies = [];
   this.explosions = [];
   this.current_score = 0;
-  this.timeId;
+  this.timeId = 0;
 
   this.draw = function () {
     var _this = this,
@@ -20,15 +22,20 @@ function game() {
 
     for (i = 0; i < _this.player.bullets.length; i++) {
       _this.player.bullets[i].draw(context);
-    };
+    }
 
     for (i = 0; i < this.enemies.length; i++) {
       this.enemies[i].draw(context);
-    };
+    }
 
     for (i = 0; i < _this.explosions.length; i++) {
       _this.explosions[i].draw(context);
-    };
+    }
+
+    this.context2.font = " 24px sans-serif";
+    this.context2.fillStyle = 'white';
+    context.textBaseline = "top";
+    this.context2.fillText("Hello There", 248, 43);
   };
 
   this.clearCanvas = function () {
@@ -37,8 +44,8 @@ function game() {
 
   this.update = function () {
     var _this = this;
-    if (keydown.space && this.shot == false) {
-      this.shot = true
+    if (keydown.space && this.shot === false) {
+      this.shot = true;
       this.player.shoot();
     } else if (!keydown.space) {
       this.shot = false;
@@ -86,7 +93,7 @@ function game() {
 
     this.detectCollision(this.enemies, this.player.bullets, this.context);
 
-  }
+  };
 
   this.runLoop = function () {
     var _this = this;
@@ -105,6 +112,7 @@ function game() {
   this.init = function () {
     var _this = this;
     _this.gameScreen.appendTo('#' + _this.containerId);
+    _this.overlayScreen.appendTo('#' + _this.containerId);
     _this.runLoop();
   };
 
@@ -113,7 +121,7 @@ function game() {
         xmax,
         xmin,
         ymax,
-        ymin, 
+        ymin,
         enemyX,
         enemyY,
         enemyRadius;
@@ -130,9 +138,9 @@ function game() {
       bullets.forEach(function (bullet) {
         if (bullet.x <= xmax && bullet.x >= xmin && bullet.y <= ymax && bullet.y >= ymin) {
           _this.updateScore(enemy.points).explosions.push(new explosion(enemy.explode(ctxt)));
-          bullet.active = false; 
+          bullet.active = false;
         }
-      })
+      });
     });
   };
 
@@ -144,6 +152,6 @@ function game() {
     }
 
     //make chainable
-    return this; 
+    return this;
   };
 }
