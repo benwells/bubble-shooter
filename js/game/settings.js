@@ -54,6 +54,7 @@ function game() {
 
   this.update = function () {
     var _this = this;
+
     if (keydown.space && _this.shot === false) {
       _this.shot = true;
       _this.player.shoot();
@@ -62,11 +63,11 @@ function game() {
     }
 
     if (keydown.up) {
-      _this.player.y -= 15;
+      _this.player.y -= 27;
     }
 
     if (keydown.down) {
-      _this.player.y += 15;
+      _this.player.y += 27;
     }
 
     //clamps the player to the canvas
