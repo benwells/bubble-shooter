@@ -17,6 +17,7 @@ function Enemy(info) {
 
   info.draw = function (canvas) {
     canvas.strokeStyle = this.color;
+    canvas.lineWidth = 3;
     // canvas.fillRect(this.x, this.y, this.width, this.height);
     canvas.beginPath();
     canvas.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true); // Outer circle
