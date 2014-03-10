@@ -89,9 +89,9 @@ function game() {
 
     _this.message.update();
 
-    if (Math.random() < 0.05) { //this number controls the frequency of enemies
+    if (Math.random() < 0.01) { //this number controls the frequency of enemies
       this.enemies.push(Enemy({
-        x: _this.CANVAS_WIDTH,
+              x: _this.CANVAS_WIDTH,
         cHeight: _this.CANVAS_HEIGHT
       }));
     }
