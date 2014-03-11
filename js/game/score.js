@@ -1,9 +1,9 @@
 function Score() {
-  this.label = "Score: ";
-  this.score = 0;
   this.color = 'green';
   this.fontSize = 22;
   this.fontStyle = 'sans-serif';
+  this.label = "Score: ";
+  this.score = 0;
   this.x = 780 - 10;
   this.y = 420;
 
