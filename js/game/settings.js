@@ -7,7 +7,7 @@ function game() {
   this.overlayScreen = $("<canvas id='canvas2' width='" + this.CANVAS_WIDTH + "' height='" + this.CANVAS_HEIGHT + "'></canvas>");
   this.context = this.gameScreen.get(0).getContext("2d");
   this.context2 = this.overlayScreen.get(0).getContext("2d");
-  this.player = new player(this.context);
+  this.player = new Player({canvas: this.context});
   this.shot = false;
   this.enemies = [];
   this.explosions = [];
@@ -27,7 +27,7 @@ function game() {
     player.draw();
 
     for (i = 0; i < player.bullets.length; i++) {
-      player.bullets[i].draw(context);
+      player.bullets[i].draw();
     }
 
     for (i = 0; i < this.enemies.length; i++) {
