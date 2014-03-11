@@ -15,7 +15,7 @@ function game() {
   this.timeId = 0;
   this.level = 1;
   this.message = new message("LEVEL " + this.level);
-  this.score = new score();
+  this.score = new Score();
   this.particles = [];
 
   this.draw = function () {
