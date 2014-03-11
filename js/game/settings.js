@@ -15,7 +15,7 @@ function game() {
   this.timeId = 0;
   this.level = 1;
   this.message = new message("LEVEL " + this.level);
-  this.score = new Score();
+  this.score = new Score({context: this.context2});
   this.particles = [];
 
   this.draw = function () {
@@ -43,7 +43,7 @@ function game() {
     }
 
     _this.message.draw(context2);
-    _this.score.draw(context2);
+    _this.score.draw();
   };
 
   this.clearCanvas = function () {
@@ -214,5 +214,5 @@ function game() {
 
       this.particles.push(particle);
     }
-  }
+  };
 }
