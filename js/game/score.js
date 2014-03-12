@@ -18,8 +18,9 @@ function Score(opts) {
 // Enemy.prototype = Object.create(ObjectBase.prototype);
 Score.prototype = new ObjectBase();
 Score.prototype.constructor = Score;
+var ScoreProto = Score.prototype;
 
-Score.prototype.draw = function () {
+ScoreProto.draw = function () {
   var _this   = this,
       context = _this.context;
 
