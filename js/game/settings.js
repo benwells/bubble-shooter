@@ -10,13 +10,13 @@ function game() {
   this.player = new Player({canvas: this.context});
   this.shot = false;
   this.enemies = [];
-  this.explosions = [];
   this.current_score = 0;
   this.timeId = 0;
   this.level = 1;
   this.message = new message("LEVEL " + this.level);
   this.score = new Score({context: this.context2});
   this.particles = [];
+  this.explosions = [];
 
   this.draw = function () {
     var _this = this,
@@ -32,10 +32,6 @@ function game() {
 
     for (i = 0; i < this.enemies.length; i++) {
       this.enemies[i].draw(context);
-    }
-
-    for (i = 0; i < _this.explosions.length; i++) {
-      _this.explosions[i].draw(context);
     }
 
     for (i = 0; i < _this.particles.length; i++) {
@@ -91,9 +87,9 @@ function game() {
       return enemy.active;
     });
 
-    _this.explosions.forEach(function (explosion) {
-      explosion.update();
-    });
+    // _this.explosions.forEach(function (explosion) {
+    //   explosion.update();
+    // });
 
     _this.particles.forEach(function (particle) {
       particle.update(20);
@@ -156,10 +152,11 @@ function game() {
         if (bullet.x <= xmax && bullet.x >= xmin && bullet.y <= ymax && bullet.y >= ymin) {
           _this.updateScore(enemy.points).explosions.push(new Explosion(enemy.explode(ctxt)));
 
-          var x = randomFloat(100, 400);
-          var y = randomFloat(100, 400);
+          // var x = randomFloat(100, 400);
+          // var y = randomFloat(100, 400);
           _this.createExplosion(enemyX, enemyY, "#525252");
           _this.createExplosion(enemyX, enemyY, "#FFA318");
+          _this.createExplosion(enemyX, enemyY, "white");
 
           bullet.active = false;
         }
