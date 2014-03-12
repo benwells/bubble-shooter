@@ -102,9 +102,9 @@ function game() {
     _this.message.update();
 
     if (Math.random() < 0.01) { //this number controls the frequency of enemies
-      _this.enemies.push(Enemy({
+      _this.enemies.push(new Enemy({
         x: _this.CANVAS_WIDTH,
-        cHeight: _this.CANVAS_HEIGHT
+        y: _this.CANVAS_HEIGHT / 4 + Math.random() * _this.CANVAS_HEIGHT / 2
       }));
     }
 
