@@ -16,22 +16,23 @@ function Bullet(opts) {
 // Bullet.prototype = Object.create(ObjectBase.prototype);
 Bullet.prototype = new ObjectBase();
 Bullet.prototype.constructor = Bullet;
+var BulletProto = Bullet.prototype;
 
 //class methods
-Bullet.prototype.inBounds = function (w, h) {
+BulletProto.inBounds = function (w, h) {
   var _this = this,
       x     = _this.x,
       y     = _this.y;
   return x >= 0 && x <= w && y >= 0 && y <= h;
 };
 
-Bullet.prototype.draw = function () {
+BulletProto.draw = function () {
   var context = this.context;
   context.fillStyle = this.color;
   context.fillRect(this.x, this.y, this.width, this.height);
 };
 
-Bullet.prototype.update = function (w, h) {
+BulletProto.update = function (w, h) {
   this.x += this.xVelocity;
   this.y += this.yVelocity;
   this.active = this.active && this.inBounds(w, h);
