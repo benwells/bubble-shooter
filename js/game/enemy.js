@@ -19,12 +19,13 @@ function Enemy(opts) {
 // Enemy.prototype = Object.create(ObjectBase.prototype);
 Enemy.prototype = new ObjectBase();
 Enemy.prototype.constructor = Enemy;
+var EnemyProto = Enemy.prototype;
 
-Enemy.prototype.inBounds = function (w, h) {
+EnemyProto.inBounds = function (w, h) {
   return this.x >= 0 && this.x <= w && this.y >= 0 && this.y <= h;
 };
 
-Enemy.prototype.draw = function (canvas) {
+EnemyProto.draw = function (canvas) {
   canvas.strokeStyle = this.color;
   canvas.lineWidth = 3;
   // canvas.fillRect(this.x, this.y, this.width, this.height);
@@ -36,7 +37,7 @@ Enemy.prototype.draw = function (canvas) {
   canvas.stroke();
 };
 
-Enemy.prototype.update = function (w, h) {
+EnemyProto.update = function (w, h) {
   this.x -= this.xVelocity;
   this.y += this.yVelocity;
 
@@ -48,7 +49,7 @@ Enemy.prototype.update = function (w, h) {
   this.active = this.active && this.inBounds(w, h);
 };
 
-Enemy.prototype.explode = function (canvas) {
+EnemyProto.explode = function (canvas) {
   // info.color = "white";
   this.active = false;
 
