@@ -1,3 +1,4 @@
+
 /*
  * gameQuery rev. 0.7.0
  *
@@ -7,15 +8,15 @@
 
 // This allows use of the convenient $ notation in a plugin
 (function($) {
-    
+
     // This prefix can be use whenever needed to namespace CSS classes, .data() inputs aso.
     var gQprefix = "gQ_";
-    
+
     // Those are the possible states of the engine
     var STATE_NEW     = 0; // Not yet started for the first time
-    var STATE_RUNNING = 1; // Started and running 
+    var STATE_RUNNING = 1; // Started and running
     var STATE_PAUSED  = 2; // Paused
-    
+
     /**
      * Utility function that returns the radius for a geometry.
      *
@@ -33,7 +34,7 @@
                 return {x: Rx, y: Ry};
         }
     };
-    
+
     /**
      * Utility function that checks for collision between two elements.
      *
@@ -74,73 +75,73 @@
             return false;
         }
     };
-    
-    /** 
+
+    /**
      * Utility function computes the offset relative to the playground of a gameQuery element without using DOM's position.
      * This should be faster than the standand .offset() function.
-     * 
+     *
      * Warning: No non-gameQuery elements should be present between this element and the playground div!
-     * 
+     *
      * @param {jQuery} element the jQuery wrapped DOM element representing the gameQuery object.
-     * @return {object} an object {x:, y: } containing the x and y offset. (Not top and left like jQuery's .offset())  
+     * @return {object} an object {x:, y: } containing the x and y offset. (Not top and left like jQuery's .offset())
      */
     var offset = function(element) {
         // Get the tileSet offset (relative to the playground)
         var offset = {x: 0, y: 0};
         var parent = element[0];
-        
+
         while(parent !== $.gameQuery.playground[0] && parent.gameQuery !== undefined) {
             offset.x += parent.gameQuery.posx;
             offset.y += parent.gameQuery.posy;
             parent = parent.parentNode;
         }
-        
+
         return offset
     }
-    
+
     /**
      * Utility function computes the index range of the tiles for a tilemap.
-     * 
+     *
      * @param {jQuery} element the jQuery wrapped DOM element representing the tilemap.
      * @param {object} offset an object holding the x and y offset of the tilemap, this is optional and will be computed if not provided.
-     * @return {object} an object {firstColumn: , lastColumn: , fristRow: , lastRow: } 
+     * @return {object} an object {firstColumn: , lastColumn: , fristRow: , lastRow: }
      */
     var visibleTilemapIndexes = function (element, elementOffset) {
         if (elementOffset === undefined) {
-            elementOffset = offset(element);   
+            elementOffset = offset(element);
         }
-        
+
         var gameQuery = element[0].gameQuery;
         // Activate the visible tiles
         return {
             firstRow:    Math.max(Math.min(Math.floor(-elementOffset.y/gameQuery.height), gameQuery.sizey), 0),
             lastRow:     Math.max(Math.min(Math.ceil(($.gameQuery.playground[0].height-elementOffset.y)/gameQuery.height), gameQuery.sizey), 0),
             firstColumn: Math.max(Math.min(Math.floor(-elementOffset.x/gameQuery.width), gameQuery.sizex), 0),
-            lastColumn:  Math.max(Math.min(Math.ceil(($.gameQuery.playground[0].width-elementOffset.x)/gameQuery.width), gameQuery.sizex), 0) 
+            lastColumn:  Math.max(Math.min(Math.ceil(($.gameQuery.playground[0].width-elementOffset.x)/gameQuery.width), gameQuery.sizex), 0)
         }
     }
-    
+
     /**
      * Utility function thast computes the buffered zone of a tilemap
-     * 
+     *
      * @param {jQuery} element the jQuery wrapped DOM element representing the tilemap.
      * @param {object} visible an object describing the visible zone
      * @return {object} an object {firstColumn: , lastColumn: , fristRow: , lastRow: }
      */
     var bufferedTilemapIndexes = function (element, visible) {
         var gameQuery = element[0].gameQuery;
-        
+
         return {
             firstRow:    Math.max(Math.min(visible.firstRow - gameQuery.buffer, gameQuery.sizey), 0),
             lastRow:     Math.max(Math.min(visible.lastRow + gameQuery.buffer, gameQuery.sizey), 0),
             firstColumn: Math.max(Math.min(visible.firstColumn - gameQuery.buffer, gameQuery.sizex), 0),
-            lastColumn:  Math.max(Math.min(visible.lastColumn + gameQuery.buffer, gameQuery.sizex), 0) 
+            lastColumn:  Math.max(Math.min(visible.lastColumn + gameQuery.buffer, gameQuery.sizex), 0)
         }
     }
-    
+
     /**
      * Utility function that creates a tile in the given tilemap
-     * 
+     *
      * @param {jQuery} tileSet the jQuery element representing the tile map
      * @param {integer} row the row index of the tile in the tile map
      * @param {integer} column the column index of the tile in the tile map
@@ -148,21 +149,21 @@
     var addTile = function(tileSet, row, column) {
         var gameQuery = tileSet[0].gameQuery;
         var name = tileSet.attr("id");
-        
+
         var tileDescription;
         if(gameQuery.func) {
             tileDescription = gameQuery.tiles(row,column)-1;
         } else {
             tileDescription = gameQuery.tiles[row][column]-1;
         }
-        
+
         var animation;
         if(gameQuery.multi) {
             animation = gameQuery.animations;
         } else {
             animation = gameQuery.animations[tileDescription];
         }
-        
+
         if(tileDescription >= 0){
             tileSet.addSprite($.gameQuery.tileIdPrefix+name+"_"+row+"_"+column,
                                   {width: gameQuery.width,
@@ -170,7 +171,7 @@
                                    posx: column*gameQuery.width,
                                    posy: row*gameQuery.height,
                                    animation: animation});
-                                   
+
             var newTile = tileSet.find("#"+$.gameQuery.tileIdPrefix+name+"_"+row+"_"+column);
             if (gameQuery.multi) {
                 newTile.setAnimation(tileDescription);
@@ -182,7 +183,7 @@
             newTile.addClass($.gameQuery.tileTypePrefix+tileDescription);
         }
     }
-    
+
     // Define the list of object/function accessible through $.
     $.extend({ gameQuery: {
         /**
@@ -222,7 +223,7 @@
 
         /**
          * "constants" for the different types of an animation
-         */ 
+         */
         ANIMATION_VERTICAL:   1,  // Generated by a vertical offset of the background
         ANIMATION_HORIZONTAL: 2,  // Generated by a horizontal offset of the background
         ANIMATION_ONCE:       4,  // Played only once (else looping indefinitely)
@@ -296,7 +297,7 @@
                 } else {
                     this.loadedAnimationsPointer = this.animations.length;
                     this.loadedSoundsPointer = this.sounds.length;
-                    
+
                     // All the resources are loaded! We can now associate the animation's images to their corresponding sprites
                     $.gameQuery.scenegraph.children().each(function(){
                         // recursive call on the children:
@@ -498,7 +499,7 @@
             },
 
             /**
-             * Add an animation to the resource Manager 
+             * Add an animation to the resource Manager
              */
             addAnimation: function(animation, callback) {
                 if($.inArray(animation,this.animations)<0){
@@ -511,7 +512,7 @@
                     switch ($.gameQuery.state){
                         case STATE_NEW:
                         case STATE_PAUSED:
-                            // Nothing to do for now 
+                            // Nothing to do for now
                             break;
                         case STATE_RUNNING:
                             // immediatly load the animation and call the callback if any
@@ -525,9 +526,9 @@
                     }
                 }
             },
-            
+
             /**
-             * Add a sound to the resource Manager 
+             * Add a sound to the resource Manager
              */
             addSound: function(sound, callback){
                 if($.inArray(sound,this.sounds)<0){
@@ -535,7 +536,7 @@
                     switch ($.gameQuery.state){
                         case STATE_NEW:
                         case STATE_PAUSED:
-                            // Nothing to do for now 
+                            // Nothing to do for now
                             break;
                         case STATE_RUNNING:
                             // immediatly load the sound and call the callback if any
@@ -549,9 +550,9 @@
 
             /**
              * Register a callback
-             * 
+             *
              * @param {function} fn the callback
-             * @param {integer} rate the rate in ms at which the callback should be called (should be a multiple of the playground rate or will be rounded) 
+             * @param {integer} rate the rate in ms at which the callback should be called (should be a multiple of the playground rate or will be rounded)
              */
             registerCallback: function(fn, rate){
                 rate  = Math.round(rate/$.gameQuery.refreshRate);
@@ -560,9 +561,9 @@
                 }
                 this.callbacks.push({fn: fn, rate: rate, idleCounter: 0});
             },
-            
+
             /**
-             * Clear the animations and sounds 
+             * Clear the animations and sounds
              */
             clear: function(callbacksToo){
                 this.animations  = [];
@@ -577,7 +578,7 @@
 
         /**
          * This is a single place to update the underlying data of sprites/groups/tiles after a position or dimesion modification.
-         */ 
+         */
         update: function(descriptor, transformation) {
             // Did we really receive a descriptor or a jQuery object instead?
             if(!$.isPlainObject(descriptor)){
@@ -593,22 +594,22 @@
             // If we couldn't find one we return
             if(!gameQuery) return;
             if(gameQuery.tileSet === true){
-                // We have a tilemap 
-                
+                // We have a tilemap
+
                 var visible = visibleTilemapIndexes(descriptor);
                 var buffered = gameQuery.buffered;
-                
-                // Test what kind of transformation we have and react accordingly 
+
+                // Test what kind of transformation we have and react accordingly
                 for(property in transformation){
                     switch(property){
                         case "x":
-                        
+
                             if(visible.lastColumn > buffered.lastColumn) {
-                                
+
                                 // Detach the tilemap
                                 var parent = descriptor[0].parentNode;
                                 var tilemap = descriptor.detach();
-                                
+
                                 var newBuffered = bufferedTilemapIndexes(descriptor, visible);
                                 for(var i = gameQuery.buffered.firstRow; i < gameQuery.buffered.lastRow; i++){
                                     // Remove the newly invisible tiles
@@ -620,21 +621,21 @@
                                         addTile(tilemap,i,j);
                                     }
                                 }
-                                
+
                                 gameQuery.buffered.firstColumn = newBuffered.firstColumn;
                                 gameQuery.buffered.lastColumn  = newBuffered.lastColumn;
-                                
+
                                 // Attach the tilemap back
                                 tilemap.appendTo(parent);
-                                
+
                             }
-                            
+
                             if(visible.firstColumn < buffered.firstColumn) {
-                                
+
                                 // Detach the tilemap
                                 var parent = descriptor[0].parentNode;
                                 var tilemap = descriptor.detach();
-                                    
+
                                 var newBuffered = bufferedTilemapIndexes(descriptor, visible);
                                 for(var i = gameQuery.buffered.firstRow; i < gameQuery.buffered.lastRow; i++){
                                     // Remove the newly invisible tiles
@@ -646,23 +647,23 @@
                                         addTile(tilemap,i,j);
                                     }
                                 }
-                                
+
                                 gameQuery.buffered.firstColumn = newBuffered.firstColumn;
                                 gameQuery.buffered.lastColumn  = newBuffered.lastColumn;
-                                
+
                                 // Attach the tilemap back
                                 tilemap.appendTo(parent);
                             }
                             break;
-                            
+
                         case "y":
-                        
+
                             if(visible.lastRow > buffered.lastRow) {
-                                
+
                                 // Detach the tilemap
                                 var parent = descriptor[0].parentNode;
                                 var tilemap = descriptor.detach();
-                                
+
                                 var newBuffered = bufferedTilemapIndexes(descriptor, visible);
                                 for(var j = gameQuery.buffered.firstColumn; j < gameQuery.buffered.lastColumn ; j++) {
                                     // Remove the newly invisible tiles
@@ -674,21 +675,21 @@
                                         addTile(tilemap,i,j);
                                     }
                                 }
-                                
+
                                 gameQuery.buffered.firstRow = newBuffered.firstRow;
                                 gameQuery.buffered.lastRow  = newBuffered.lastRow;
-                                
+
                                 // Attach the tilemap back
                                 tilemap.appendTo(parent);
-                                
-                            }  
-                            
+
+                            }
+
                             if(visible.firstRow < buffered.firstRow) {
-                                
+
                                 // Detach the tilemap
                                 var parent = descriptor[0].parentNode;
                                 var tilemap = descriptor.detach();
-                                
+
                                 var newBuffered = bufferedTilemapIndexes(descriptor, visible);
                                 for(var j = gameQuery.buffered.firstColumn; j < gameQuery.buffered.lastColumn ; j++) {
                                     // Remove the newly invisible tiles
@@ -700,19 +701,19 @@
                                         addTile(tilemap,i,j);
                                     }
                                 }
-                                
+
                                 gameQuery.buffered.firstRow = newBuffered.firstRow;
                                 gameQuery.buffered.lastRow  = newBuffered.lastRow;
-                                
+
                                 // Attach the tilemap back
                                 tilemap.appendTo(parent);
                             }
                             break;
-                            
+
                         case "angle":
                             //TODO
                             break;
-                            
+
                         case "factor":
                             //TODO
                             break;
@@ -755,8 +756,8 @@
         },
         // State of the engine
         state: STATE_NEW,
-        
-        // CSS classes used to mark game element 
+
+        // CSS classes used to mark game element
         spriteCssClass:  gQprefix + "sprite",
         groupCssClass:   gQprefix + "group",
         tilemapCssClass: gQprefix + "tilemap",
@@ -766,7 +767,7 @@
         tileIdPrefix:    gQprefix + "tile_"
     },
 
-    /** 
+    /**
      * Mute (or unmute) all the sounds.
      */
     muteSound: function(muted){
@@ -774,14 +775,14 @@
             $.gameQuery.resourceManager.sounds[i].muted(muted);
         }
     },
-    
+
     /**
      * Accessor for the currently defined playground as a jQuery object
      */
     playground: function() {
         return $.gameQuery.playground
     },
-    
+
     /**
      * Define a callback called during the loading of the game's resources.
      *
@@ -804,12 +805,12 @@
     $.fn.extend({
         /**
          * Defines the currently selected div to which contains the game and initialize it.
-         * 
+         *
          * This is a non-destructive call
          */
         playground: function(options) {
             if(this.length == 1){
-                if(this[0] == document){ 
+                if(this[0] == document){
                     // Old usage detected, this is not supported anymore
                     throw "Old playground usage, use $.playground() to retreive the playground and $('mydiv').playground(options) to set the div!";
                 }
@@ -851,7 +852,7 @@
                         $.gameQuery.keyTracker[event.keyCode] = false;
                     });
                 }
-                
+
                 // Add the mouseTracker to the gameQuery object:
                  $.gameQuery.mouseTracker = {
                     x: 0,
@@ -887,7 +888,7 @@
             $.gameQuery.resourceManager.preload();
             return this;
         },
-        
+
         /**
          * TODO
          */
@@ -896,7 +897,7 @@
             $.gameQuery.scenegraph.css("visibility","hidden");
             return this;
         },
-        
+
         /**
          * Resume the game if it was paused and call the callback passed in argument once the newly added ressources are loaded.
          */
@@ -915,7 +916,7 @@
             $.gameQuery.scenegraph.empty()
             return this;
         },
-        
+
         /**
          * Removes all the sprites, groups and tilemaps present in the scenegraph as well as all loaded animations and sounds
          */
@@ -955,7 +956,7 @@
                     height:   options.height,
                     width:    options.width
                 });
-            
+
             if(this == $.gameQuery.playground){
                 $.gameQuery.scenegraph.append(newGroupElement);
             } else if ((this == $.gameQuery.scenegraph)||(this.hasClass($.gameQuery.groupCssClass))){
@@ -971,8 +972,8 @@
         },
 
         /**
-         * Add a sprite to the current node. Works only on the playground or any of its sub-nodes 
-         * 
+         * Add a sprite to the current node. Works only on the playground or any of its sub-nodes
+         *
          * This is a non-destructive call
          */
         addSprite: function(sprite, options) {
@@ -1002,7 +1003,7 @@
                      top: options.posy,
                      backgroundPosition: ((options.animation)? -options.animation.offsetx : 0)+"px "+((options.animation)? -options.animation.offsety : 0)+"px"
                 });
-                
+
             if(this == $.gameQuery.playground){
                 $.gameQuery.scenegraph.append(newSpriteElem);
             } else {
@@ -1059,24 +1060,24 @@
             }, options);
 
             var tileSet = tilemapFragment.clone().attr("id",name).css({
-                    top: options.posy, 
-                    left: options.posx, 
-                    height: options.height*options.sizey, 
+                    top: options.posy,
+                    left: options.posx,
+                    height: options.height*options.sizey,
                     width: options.width*options.sizex
                 });
-            
+
             if(this == $.gameQuery.playground){
                 $.gameQuery.scenegraph.append(tileSet);
             } else {
                 this.append(tileSet);
             }
-            
+
             tileSet[0].gameQuery = options;
             var gameQuery = tileSet[0].gameQuery;
             gameQuery.tileSet = true;
             gameQuery.tiles = tileDescription;
             gameQuery.func = (typeof tileDescription === "function");
-                
+
             if($.isArray(animationList)){
                 var frameTracker = [];
                 var idleCounter = [];
@@ -1097,7 +1098,7 @@
                 gameQuery.animations = animationList;
                 gameQuery.idleCounter =  0;
                 gameQuery.multi = true;
-                
+
             }
 
             // Get the tileSet offset (relative to the playground)
@@ -1111,13 +1112,13 @@
                     addTile(tileSet, i, j);
                 }
             }
-            
+
             return this.pushStack(tileSet);
         },
 
         /**
          * Stop the animation at the current frame
-         * 
+         *
          * This is a non-destructive call.
          */
         pauseAnimation: function() {
@@ -1127,7 +1128,7 @@
 
         /**
          * Resume the animation (if paused)
-         * 
+         *
          * This is a non-destructive call.
          */
         resumeAnimation: function() {
@@ -1150,7 +1151,7 @@
                     gameQuery.multi = distance;
                     gameQuery.frameIncrement = 1;
                     gameQuery.currentFrame = 0;
-                    
+
                     if(gameQuery.animation.type & $.gameQuery.ANIMATION_VERTICAL) {
                         this.css("background-position",""+(-distance-gameQuery.animation.offsetx)+"px "+(-gameQuery.animation.offsety)+"px");
                     } else if(gameQuery.animation.type & $.gameQuery.ANIMATION_HORIZONTAL) {
@@ -1217,7 +1218,7 @@
             } else if (typeof arg2 === "string") {
                 filter = arg2;
             }
-            
+
             var resultList = [];
 
             // Retrieve 'this' offset by looking at the parents
@@ -1246,16 +1247,16 @@
             }
             boundingCircle.originalRadius = Math.sqrt(Math.pow(gameQuery.width,2) + Math.pow(gameQuery.height,2))/2
             boundingCircle.radius = gameQuery.factor*boundingCircle.originalRadius;
-            
+
             if(override && override.x){
                 boundingCircle.x = override.x + gameQuery.width/2.0;
             }
             if(override && override.y){
                 boundingCircle.y = override.y + gameQuery.height/2.0;
             }
-            
+
             gameQuery.boundingCircle = boundingCircle;
-            
+
 
             // Is 'this' inside the playground ?
             if( (gameQuery.boundingCircle.y + gameQuery.boundingCircle.radius + offsetY < pgdGeom.top)    ||
@@ -1315,7 +1316,7 @@
         /**
          * Add the sound to the resourceManager for later use and
          * associates it to the selected dom element(s).
-         * 
+         *
          * This is a non-destructive call
          */
         addSound: function(sound, add) {
@@ -1343,7 +1344,7 @@
 
         /**
          * Play the sound(s) associated with the selected dom element(s).
-         * 
+         *
          * This is a non-destructive call.
          */
         playSound: function() {
@@ -1361,7 +1362,7 @@
 
         /**
          * Stops the sound(s) associated with the selected dom element(s) and rewinds them.
-         * 
+         *
          * This is a non-destructive call.
          */
         stopSound: function() {
@@ -1379,7 +1380,7 @@
 
         /**
          * Pauses the sound(s) associated with the selected dom element(s).
-         * 
+         *
          * This is a non-destructive call.
          */
 
@@ -1398,7 +1399,7 @@
 
         /**
          * Mute or unmute the selected sound or all the sounds if none is specified.
-         * 
+         *
          * This is a non-destructive call.
          */
 
@@ -1420,10 +1421,10 @@
 /** ---------------------------------------------------------------------------------------------------------------------------------------------------------------- **/
 
         /**
-         * Internal function doing the combined actions of rotate and scale. 
-         * 
+         * Internal function doing the combined actions of rotate and scale.
+         *
          * Please use .rotate() or .scale() instead since they are part of the supported API!
-         * 
+         *
          * This is a non-destructive call.
          */
         transform: function(angle, factor) {
@@ -1468,7 +1469,7 @@
          * Rotate the element(s) clock-wise.
          *
          * @param {Number} angle the angle in degrees
-         * 
+         *
          * This is a non-destructive call when called with a parameter. Without parameter it IS a destructive call since the return value is the current rotation angle!
          */
         rotate: function(angle){
@@ -1486,7 +1487,7 @@
          * Change the scale of the selected element(s). The passed argument is a ratio:
          *
          * @param {Number} factor a ratio: 1.0 = original size, 0.5 = half the original size etc.
-         * 
+         *
          * This is a non-destructive call when called with a parameter. Without parameter it IS a destructive call since the return value is the current scale factor!
          */
         scale: function(factor){
@@ -1502,7 +1503,7 @@
 
         /**
          * Flips the element(s) horizontally.
-         * 
+         *
          * This is a non-destructive call when called with a parameter. Without parameter it IS a destructive call since the return value is the current horizontal flipping status!
          */
         fliph: function(flip){
@@ -1521,7 +1522,7 @@
 
         /**
          * Flips the element(s) vertically.
-         * 
+         *
          * This is a non-destructive call when called with a parameter. Without parameter it IS a destructive call since the return value is the current vertical flipping status!
          */
         flipv: function(flip){
@@ -1551,7 +1552,7 @@
          * object {x,y,z}
          *
          * Please note that the z coordinate is just the z-index.
-         * 
+         *
          * This is a non-destructive call when called with a parameter. Without parameter it IS a destructive call.
          */
         xyz: function(x, y, z, relative) {
@@ -1566,7 +1567,7 @@
          * The following functions are all all shortcuts for the .xyz(...) function.
          *
          * @see xyz for detailed documentation.
-         * 
+         *
          * This is a non-destructive call when called with a parameter. Without parameter it IS a destructive call.
          */
         x: function(value, relative) {
@@ -1610,7 +1611,7 @@
          * If no argument is specified then the functions act as a getter and
          *
          * return an object {w,h}
-         * 
+         *
          * This is a non-destructive call when called with a parameter. Without parameter it IS a destructive call.
          */
         wh: function(w, h, relative) {
@@ -1625,7 +1626,7 @@
          * The following functions are all all shortcuts for the .wh(...) function.
          *
          * @see wh for detailed documentation.
-         * 
+         *
          * This is a non-destructive call when called with a parameter. Without parameter it IS a destructive call.
          */
         w: function(value, relative) {
@@ -1667,7 +1668,7 @@
                         }
                         gameQuery.posx = option.x;
                         this.css("left",""+(gameQuery.posx + gameQuery.posOffsetX)+"px");
-                        
+
                         //update the sub tile maps (if any), this forces to recompute which tiles are visible
                         this.find("."+$.gameQuery.tilemapCssClass).each(function(){
                             $(this).x(0, true);
@@ -1680,7 +1681,7 @@
                         }
                         gameQuery.posy = option.y;
                         this.css("top",""+(gameQuery.posy + gameQuery.posOffsetY)+"px");
-                        
+
                         //update the sub tile maps (if any), this forces to recompute which tiles are visible
                         this.find("."+$.gameQuery.tilemapCssClass).each(function(){
                             $(this).y(0, true);
@@ -1734,5 +1735,5 @@
     }); // end of the extensio of $.fn
 
     // alias gameQuery to gQ for easier access
-    $.extend({ gQ: $.gameQuery}); 
+    $.extend({ gQ: $.gameQuery});
 })(jQuery);
