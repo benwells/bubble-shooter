@@ -3,8 +3,8 @@ function Player(opts) {
 
   this.canvas = {};
   this.color = "#00A";
-  this.x = 40;
   this.y = 100;
+  this.x = 40;
   this.width = 40;
   this.height = 32;
   this.bullets = [];
