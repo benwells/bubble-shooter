@@ -8,6 +8,7 @@ function Explosion (opts) {
   this.setOpts(opts);
 }
 
+
 //inheritance from ObjectBase Class
 // Enemy.prototype = Object.create(ObjectBase.prototype);
 Explosion.prototype = new ObjectBase();
