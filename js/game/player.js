@@ -15,20 +15,21 @@ function Player(opts) {
 // Player.prototype = Object.create(ObjectBase.prototype);
 Player.prototype = new ObjectBase();
 Player.prototype.constructor = Player;
+var PlayerProto = Player.prototype;
 
 //Class Methods
-Player.prototype.draw = function (canvas) {
+PlayerProto.draw = function (canvas) {
   this.canvas.drawImage(document.getElementById('shipImg'),this.x, this.y, this.width, this.height);
 };
 
-Player.prototype.midpoint = function () {
+PlayerProto.midpoint = function () {
   return {
     x: this.x + this.width / 2,
     y: this.y + this.height / 2
   };
 };
 
-Player.prototype.shoot = function () {
+PlayerProto.shoot = function () {
   var _this = this;
   var bulletPosition = _this.midpoint();
 
