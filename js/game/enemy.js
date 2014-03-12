@@ -53,10 +53,10 @@ Enemy.prototype.explode = function (canvas) {
   this.active = false;
 
   //return an explosion object
-  return {
+  return new Explosion({
     width: this.width / 2,
     height: this.height / 2,
     x: this.x,
     y: this.y
-  };
+  });
 };

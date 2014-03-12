@@ -1,18 +1,27 @@
-function explosion (info) {
-  info = info || {};
-  info.color = 'white';
-  info.xVelocity = 0;
-  info.yVelocity = 25;
-  info.draw = function(canvas) {
-    canvas.fillStyle = info.color;
-    canvas.fillRect(info.x, info.y, info.width, info.height);
-    canvas.fillRect(info.x+20, info.y, info.width, info.height);
-    canvas.fillRect(info.x+40, info.y, info.width, info.height);
-    canvas.fillRect(info.x+60, info.y, info.width, info.height);
-  };
-  info.update = function () {
-    info.x += info.xVelocity;
-    info.y += info.yVelocity;
-  };
-  return info;
+function Explosion (opts) {
+  ObjectBase.call(this);
+
+  this.color = 'white';
+  this.xVelocity = 0;
+  this.yVelocity = 25;
+
+  this.setOpts(opts);
 }
+
+//inheritance from ObjectBase Class
+// Enemy.prototype = Object.create(ObjectBase.prototype);
+Explosion.prototype = new ObjectBase();
+Explosion.prototype.constructor = Explosion;
+
+Explosion.prototype.draw = function(canvas) {
+  canvas.fillStyle = this.color;
+  canvas.fillRect(this.x, this.y, this.width, this.height);
+  canvas.fillRect(this.x+20, this.y, this.width, this.height);
+  canvas.fillRect(this.x+40, this.y, this.width, this.height);
+  canvas.fillRect(this.x+60, this.y, this.width, this.height);
+};
+
+Explosion.prototype.update = function () {
+  this.x += this.xVelocity;
+  this.y += this.yVelocity;
+};

@@ -154,7 +154,7 @@ function game() {
 
       bullets.forEach(function (bullet) {
         if (bullet.x <= xmax && bullet.x >= xmin && bullet.y <= ymax && bullet.y >= ymin) {
-          _this.updateScore(enemy.points).explosions.push(new explosion(enemy.explode(ctxt)));
+          _this.updateScore(enemy.points).explosions.push(new Explosion(enemy.explode(ctxt)));
 
           var x = randomFloat(100, 400);
           var y = randomFloat(100, 400);
