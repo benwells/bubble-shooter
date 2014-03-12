@@ -1,4 +1,5 @@
 function Score(opts) {
+  ObjectBase.call(this);
 
   this.color = 'green';
   this.fontSize = 22;
@@ -13,6 +14,11 @@ function Score(opts) {
   this.setOpts(opts);
 }
 
+//inheritance from ObjectBase Class
+// Enemy.prototype = Object.create(ObjectBase.prototype);
+Score.prototype = new ObjectBase();
+Score.prototype.constructor = Score;
+
 Score.prototype.draw = function () {
   var _this   = this,
       context = _this.context;
@@ -22,10 +28,4 @@ Score.prototype.draw = function () {
   context.textBaseline = "bottom";
   context.textAlign="right";
   context.fillText(this.label + this.score, this.x, this.y);
-};
-
-Score.prototype.setOpts = function(opts) {
-  for (var prop in opts) {
-    this[prop] = opts[prop];
-  }
 };
