@@ -14,14 +14,21 @@ Explosion.prototype = new ObjectBase();
 Explosion.prototype.constructor = Explosion;
 
 Explosion.prototype.draw = function(canvas) {
-  canvas.fillStyle = this.color;
-  canvas.fillRect(this.x, this.y, this.width, this.height);
-  canvas.fillRect(this.x+20, this.y, this.width, this.height);
-  canvas.fillRect(this.x+40, this.y, this.width, this.height);
-  canvas.fillRect(this.x+60, this.y, this.width, this.height);
+  var _this = this,
+    x = _this.x,
+    y = _this.y,
+    width = _this.width,
+    height = _this.height;
+
+  canvas.fillStyle = _this.color;
+  canvas.fillRect(x, y, width, height);
+  canvas.fillRect(x+20, y, width, height);
+  canvas.fillRect(x+40, y, width, height);
+  canvas.fillRect(x+60, y, width, height);
 };
 
 Explosion.prototype.update = function () {
-  this.x += this.xVelocity;
-  this.y += this.yVelocity;
+  var _this = this;
+  _this.x += _this.xVelocity;
+  _this.y += _this.yVelocity;
 };
