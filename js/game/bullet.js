@@ -1,25 +1,38 @@
-function Bullet(info) {
-  info.active = true;
-  info.yVelocity = 0;
-  info.xVelocity = info.speed;
-  info.width = 3;
-  info.height = 3;
-  info.color = "white";
+function Bullet(opts) {
+  ObjectBase.call(this);
+  this.active = true;
+  this.yVelocity = 0;
+  this.xVelocity = 0;
+  this.width = 3;
+  this.height = 3;
+  this.color = "white";
+  this.context = {};
+  this.x = 0;
+  this.y = 0;
 
-  info.inBounds = function (w, h) {
-    return info.x >= 0 && info.x <= w && info.y >= 0 && info.y <= h;
-  };
-
-  info.draw = function (context) {
-    context.fillStyle = this.color;
-    context.fillRect(this.x, this.y, this.width, this.height);
-  };
-
-  info.update = function (w, h) {
-    info.x += info.xVelocity;
-    info.y += info.yVelocity;
-    info.active = info.active && info.inBounds(w, h);
-  };
-
-  return info;
+  this.setOpts(opts);
 }
+//inheritance from ObjectBase Class
+// Bullet.prototype = Object.create(ObjectBase.prototype);
+Bullet.prototype = new ObjectBase();
+Bullet.prototype.constructor = Bullet;
+
+//class methods
+Bullet.prototype.inBounds = function (w, h) {
+  var _this = this,
+      x     = _this.x,
+      y     = _this.y;
+  return x >= 0 && x <= w && y >= 0 && y <= h;
+};
+
+Bullet.prototype.draw = function () {
+  var context = this.context;
+  context.fillStyle = this.color;
+  context.fillRect(this.x, this.y, this.width, this.height);
+};
+
+Bullet.prototype.update = function (w, h) {
+  this.x += this.xVelocity;
+  this.y += this.yVelocity;
+  this.active = this.active && this.inBounds(w, h);
+};

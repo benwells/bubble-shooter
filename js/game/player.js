@@ -12,6 +12,7 @@ function Player(opts) {
   this.setOpts(opts);
 }
 //inheritance from ObjectBase Class
+// Player.prototype = Object.create(ObjectBase.prototype);
 Player.prototype = new ObjectBase();
 Player.prototype.constructor = Player;
 
@@ -28,20 +29,13 @@ Player.prototype.midpoint = function () {
 };
 
 Player.prototype.shoot = function () {
-  var bulletPosition = this.midpoint();
-  var b = new Bullet({
-    'speed': 20,
-    'x': bulletPosition.x,
-    'y': bulletPosition.y,
-    context: this.canvas
-  });
+  var _this = this;
+  var bulletPosition = _this.midpoint();
 
-  this.bullets.push(b);
-
-  // this.bullets.push(new Bullet({
-  //   speed: 20,
-  //   x: bulletPosition.x,
-  //   y: bulletPosition.y,
-  //   context: this.canvas
-  // }));
+  _this.bullets.push(new Bullet({
+    xVelocity: 20,
+    x: bulletPosition.x,
+    y: bulletPosition.y,
+    context: _this.canvas
+  }));
 };

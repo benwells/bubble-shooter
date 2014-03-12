@@ -78,7 +78,7 @@ function game() {
       bullet.update(_this.CANVAS_WIDTH, _this.CANVAS_HEIGHT);
     });
 
-    //get rid of inactive bullets
+    // get rid of inactive bullets
     _this.player.bullets = _this.player.bullets.filter(function (bullet) {
       return bullet.active;
     });
