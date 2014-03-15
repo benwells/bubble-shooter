@@ -180,6 +180,7 @@ function game() {
           //initiate new level message if level up
           if (_this.current_score % _this.pointsPerLevel === 0) {
             _this.level++;
+            _this.score.level++;
             _this.message = new Message("LEVEL " + _this.level);
             _this.message.active = true;
           }

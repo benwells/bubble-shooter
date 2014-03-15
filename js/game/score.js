@@ -2,10 +2,12 @@ function Score(opts) {
   ObjectBase.call(this);
 
   this.color = 'green';
-  this.fontSize = 22;
+  this.fontSize = 18;
   this.fontStyle = 'sans-serif';
-  this.label = "Score: ";
+  this.scoreLabel = "Score: ";
+  this.levelLabel = "Level: ";
   this.score = 0;
+  this.level = 1;
   this.x = 780 - 10;
   this.y = 420;
   this.context = {};
@@ -28,5 +30,5 @@ ScoreProto.draw = function () {
   context.fillStyle = _this.color;
   context.textBaseline = "bottom";
   context.textAlign="right";
-  context.fillText(this.label + this.score, this.x, this.y);
+  context.fillText(this.scoreLabel + this.score + "  |  " + this.levelLabel + this.level, this.x, this.y);
 };
