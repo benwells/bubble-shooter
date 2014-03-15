@@ -11,9 +11,11 @@ function game() {
   this.shot = false;
   this.enemies = [];
   this.current_score = 0;
+  this.pointsPerLevel = 500;
+  this.hardness = 0.005;
   this.timeId = 0;
   this.level = 1;
-  this.message = new message("LEVEL " + this.level);
+  this.message = new Message("LEVEL " + this.level);
   this.score = new Score({context: this.context2});
   this.particles = [];
   this.explosions = [];
@@ -38,7 +40,9 @@ function game() {
       _this.particles[i].draw(context2);
     }
 
-    _this.message.draw(context2);
+    if (_this.message.active === true) {
+      _this.message.draw(context2);
+    }
     _this.score.draw();
   };
 
@@ -95,9 +99,21 @@ function game() {
       particle.update(20);
     });
 
-    _this.message.update();
+    if (_this.message.active) {
+      _this.message.update(_this.CANVAS_WIDTH, _this.CANVAS_HEIGHT);
+    }
 
-    if (Math.random() < 0.01) { //this number controls the frequency of enemies
+    // if (_this.current_score % 20 == 0 ) {
+    //   console.log('mod!')
+      // _this.message.update(_this.CANVAS_WIDTH, _this.CANVAS_HEIGHT);
+    // }
+    // else {
+    //   console.log('resetting message stuff')
+    //
+    //   this.message.active = true;
+    // }
+
+    if (Math.random() < _this.hardness) { //this number controls the frequency of enemies
       _this.enemies.push(new Enemy({
         x: _this.CANVAS_WIDTH,
         y: _this.CANVAS_HEIGHT / 4 + Math.random() * _this.CANVAS_HEIGHT / 2
@@ -150,10 +166,24 @@ function game() {
 
       bullets.forEach(function (bullet) {
         if (bullet.x <= xmax && bullet.x >= xmin && bullet.y <= ymax && bullet.y >= ymin) {
+
+          //update score
           _this.updateScore(enemy.points).explosions.push(new Explosion(enemy.explode(ctxt)));
 
-          // var x = randomFloat(100, 400);
-          // var y = randomFloat(100, 400);
+          //increase the frequency of enemies at regular point intervals
+          if (_this.current_score % (_this.pointsPerLevel / 10) === 0) {
+
+            _this.hardness += 0.005;
+          }
+
+
+          //initiate new level message if level up
+          if (_this.current_score % _this.pointsPerLevel === 0) {
+            _this.level++;
+            _this.message = new Message("LEVEL " + _this.level);
+            _this.message.active = true;
+          }
+
           _this.createExplosion(enemyX, enemyY, "#525252");
           _this.createExplosion(enemyX, enemyY, "#FFA318");
           _this.createExplosion(enemyX, enemyY, "white");
