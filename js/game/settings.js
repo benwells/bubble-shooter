@@ -3,10 +3,12 @@ function game() {
   this.CANVAS_HEIGHT = 420;
   this.FPS = 20;
   this.containerId = "container";
-  this.gameScreen = $("<canvas width='" + this.CANVAS_WIDTH + "' height='" + this.CANVAS_HEIGHT + "'></canvas>");
+  this.gameScreen = $("<canvas id='canvas1' width='" + this.CANVAS_WIDTH + "' height='" + this.CANVAS_HEIGHT + "'></canvas>");
+  this.bgScreen = $("<canvas id='canvas3' width='" + this.CANVAS_WIDTH + "' height='" + this.CANVAS_HEIGHT + "'></canvas>");
   this.overlayScreen = $("<canvas id='canvas2' width='" + this.CANVAS_WIDTH + "' height='" + this.CANVAS_HEIGHT + "'></canvas>");
   this.context = this.gameScreen.get(0).getContext("2d");
   this.context2 = this.overlayScreen.get(0).getContext("2d");
+  this.context3 = this.bgScreen.get(0).getContext("2d");
   this.player = new Player({canvas: this.context});
   this.shot = false;
   this.enemies = [];
@@ -17,6 +19,7 @@ function game() {
   this.level = 1;
   this.message = new Message("LEVEL " + this.level);
   this.score = new Score({context: this.context2});
+  this.background = new Background({context: this.context3, height:this.CANVAS_HEIGHT, width:this.CANVAS_WIDTH * 4});
   this.particles = [];
   this.explosions = [];
 
@@ -24,6 +27,7 @@ function game() {
     var _this = this,
       context = _this.context,
       context2 = _this.context2,
+      context3 = _this.context3,
       player = _this.player;
 
     player.draw();
@@ -44,12 +48,14 @@ function game() {
       _this.message.draw(context2);
     }
     _this.score.draw();
+    _this.background.draw();
   };
 
   this.clearCanvas = function () {
     var _this = this;
     _this.context.clearRect(0, 0, _this.CANVAS_WIDTH, _this.CANVAS_HEIGHT);
     _this.context2.clearRect(0, 0, _this.CANVAS_WIDTH, _this.CANVAS_HEIGHT);
+    _this.context3.clearRect(0, 0, _this.CANVAS_WIDTH, _this.CANVAS_HEIGHT);
   };
 
   this.update = function () {
@@ -103,6 +109,8 @@ function game() {
       _this.message.update(_this.CANVAS_WIDTH, _this.CANVAS_HEIGHT);
     }
 
+    _this.background.update();
+
     // if (_this.current_score % 20 == 0 ) {
     //   console.log('mod!')
       // _this.message.update(_this.CANVAS_WIDTH, _this.CANVAS_HEIGHT);
@@ -140,6 +148,7 @@ function game() {
 
   this.init = function () {
     var _this = this;
+    _this.bgScreen.appendTo('#' + _this.containerId);
     _this.gameScreen.appendTo('#' + _this.containerId);
     _this.overlayScreen.appendTo('#' + _this.containerId);
     _this.runLoop();

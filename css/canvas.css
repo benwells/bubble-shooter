@@ -1,6 +1,6 @@
 canvas {
   border: 1px solid black;
-	background: black;
+	background: none;
 	position: absolute;
 /*	position: relative;*/
   left: 0;
@@ -13,8 +13,18 @@ canvas {
   box-shadow:         2px 2px 19px 0px rgba(50, 50, 50, 1);
 }
 
+#canvas1 {
+  z-index: 23;
+  background:none;
+}
+
 #canvas2 {
   z-index: 1;
+  background:none;
+}
+
+#canvas3 {
+  z-index: 0;
   background:none;
 }
 
